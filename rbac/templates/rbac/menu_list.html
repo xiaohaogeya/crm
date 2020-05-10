@@ -1,0 +1,151 @@
+{% extends 'starter.html' %}
+{% block title %}
+    <h3 style="text-align: center;">菜单展示</h3>
+{% endblock %}
+{% block content %}
+<div class="row">
+
+    <div class="col-xs-4" style="margin-left: 100px;width: 400px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-book"></i>菜单管理
+                <a href="{% url 'rbac:menu_add' %}" class="btn btn-success btn-sm pull-right" style="padding: 2px 2px;">
+                    <i class="fa fa-plus fa-spin"></i>新建
+                </a>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover table-striped menu-body">
+                    <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>图标</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for menu in menu_lists %}
+                            <tr class="{% if mid == menu.id|safe %}active{% endif %}">
+                                <td>
+                                    <a href="?mid={{ menu.id }}">
+                                        {{ menu.title }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <i class="fa {{ menu.icon }} fa-spin"></i>
+                                </td>
+                                <td>
+                                    <a href="{% url 'rbac:menu_edit' menu.id %}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'rbac:menu_del' menu.id %}">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-6 " style="margin-left: 100px;width: 1000px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-cubes"></i>权限管理
+                <a href="{% url 'rbac:multi_permissions' %}" class="btn btn-primary btn-sm pull-right" style="padding: 2px 2px;">
+                    <i class="fa fa-scissors fa-spin"></i>
+                    批量操作
+                </a>
+                <a href="{% url 'rbac:permission_add' %}" class="btn btn-success btn-sm pull-right" style="padding: 2px 2px;">
+                    <i class="fa fa-plus fa-spin"></i>
+                    新建
+                </a>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover permission-area">
+                    <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>路由</th>
+                            <th>路由别名</th>
+                            <th>是否二级菜单</th>
+{#                            <th>所属菜单</th>#}
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for permissions in permissions_list %}
+                            {% if permissions.menu_id %}
+                            <tr class=" parent">
+                                <td>
+                                    {% if permissions.menu_id %}<i class="fa fa-caret-down moca"></i>{% endif %}
+
+                                    {{ permissions.title }}
+                                </td>
+                                <td>
+                                    {{ permissions.url }}
+                                </td>
+                                <td>
+                                    {{ permissions.url_name }}
+                                </td>
+                                <td>
+                                        是
+                                </td>
+{#                                <td>#}
+{#                                    {{ permissions.menu }}#}
+{#                                </td>#}
+                                <td>
+                                    <a href="" title="编辑">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="" title="删除">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                </td>
+
+                            </tr>
+                            {% endif %}
+                            {% for node in permissions.children %}
+                                <tr>
+                                <td>
+                                    {{ node.title }}
+                                </td>
+                                <td>
+                                    {{ node.url }}
+                                </td>
+                                <td>
+                                    {{ node.url_name }}
+                                </td>
+                                <td>
+
+                                </td>
+{#                                <td>#}
+{#                                    {{ node.menu }}#}
+{#                                </td>#}
+                                <td>
+                                    <a href="" title="编辑">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="" title="删除">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+{% endblock %}

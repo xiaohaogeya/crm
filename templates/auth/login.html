@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- saved from url=(0050)http://www.jq22.com/demo/jquery-Sharelink20151012/ -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>登陆丨Sharelink</title>
+<link rel="stylesheet" href="{% static 'auth/css/style.css' %}">
+</head><body>
+<div class="login-container">
+<h1>小骚浩赌场</h1>
+<div class="connect">
+<p style="">开心每一天</p>
+</div>
+<form action="" method="post" id="loginForm" novalidate="novalidate">
+{% csrf_token %}
+<div>
+<span style="color:red;">{{ error }}</span>
+{#        <div class="form-group {% if form_obj.username.errors.0 %} has-error {% endif %}">#}
+{#        <label for="{{ form_obj.username.id_for_label }}">{{ form_obj.username.label }}</label>#}
+{#        {{ form_obj.username }}#}
+{#        <span class="help-block">{{ form_obj.username.errors.0 }}</span>#}
+{#    </div>#}
+{##}
+{#    <div class="form-group {% if form_obj.password.errors.0 %} has-error {% endif %}">#}
+{#        {{ form_obj.password }}#}
+{#        <span class="help-block">{{ form_obj.password.errors.0 }}</span>#}
+{#    </div>#}
+
+<input type="text" name="username" class="username" placeholder="用户名" autocomplete="off" >
+</div>
+<div>
+<input type="password" name="password" class="password" placeholder="密码" oncontextmenu="return false"
+       onpaste="return false">
+</div>
+<button id="submit" type="submit">登 录</button>
+</form>
+<a href="{% url 'register' %}">
+<button type="button" class="register-tis">还有没有账号？</button>
+</a>
+</div>
+
+<script src="{% static 'auth/js/jquery.min.js' %}"></script>
+<script src="{% static 'auth/js/common.js' %}"></script>
+
+<script src="{% static 'auth/js/supersized.3.2.7.min.js' %}"></script>
+<script src="{% static 'auth/js/supersized-init.js' %}"></script>
+
+<script src="{% static 'auth/js/jquery.validate.min.js' %}"></script>
+
+</body></html>

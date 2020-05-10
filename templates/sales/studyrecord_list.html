@@ -1,0 +1,74 @@
+
+{% extends 'starter.html' %}
+{% load mytags %}
+{% block title %}
+
+    <h3 style="text-align: center;">学习记录展示</h3>
+
+
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+    <table  class="table table-bordered table-hover table-striped">
+
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>学员</th>
+                <th>某节课程</th>
+                <th>考勤</th>
+                <th>本节成绩</th>
+                <th>作业批语</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for study in form_set %}
+                <tr>
+
+                    {{ study.id }}
+                    <td class="first_child">
+                        {{ request|list_number:forloop.counter }}
+                    </td>
+                    <td hidden>
+                        {{ study.student }}
+                    </td>
+                    <td >
+                        {{ study.instance.student }}
+                    </td>
+                    <td hidden>
+                        {{ study.course_record }}
+                    </td>
+                    <td >
+                        {{ study.instance.course_record }}
+                    </td>
+                    <td>
+                        {{ study.attendance }}
+                    </td>
+                    <td>
+                        {{ study.score }}
+                    </td>
+                    <td>
+                        {{ study.homework_note }}
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+<button class="btn btn-success pull-right">提交</button>
+    {{ page_html }}
+
+{% endblock %}
+
+
+
+

@@ -1,0 +1,33 @@
+{% extends 'starter.html' %}
+
+{% block title %}
+{% if cid %}
+编辑客户页面
+{% else %}
+添加客户页面
+{% endif %}
+{% endblock %}
+
+{% block content %}
+    <form action="" class="form-horizontal" method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form_obj %}
+            <div class="form-group {% if field.errors.0 %} has-error {% endif %}" >
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="col-xs-2 control-label">
+                        {{ field.label }}
+                        </label>
+                        <div class="col-xs-10">
+                            {{ field }}
+                            <span class="text-danger"> {{ field.errors.0 }}</span>
+                        </div>
+                </div>
+            </div>
+        {% endfor %}
+    <div class="form-group">
+        <div class="col-xs-offset-2 col-xs-10">
+            <button type="submit" class="btn btn-success pull-right">提交</button>
+        </div>
+    </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,114 @@
+{% extends 'starter.html' %}
+
+{% load mytags %}
+
+{% block title %}
+    <h3 style="text-align: center;">报名信息展示</h3>
+
+{% endblock %}
+{% block qq %}
+      <div class="input-group input-group-sm">
+          <select name="action" id="choose">
+                    <option value="">请选择</option>
+                    <option value="customer__name__contains">客户姓名</option>
+                    <option value="contract_approved">审批通过</option>
+                    <option value="school__name__contains">学校</option>
+                    <option value="enrolment_class__course__contains">所报班级</option>
+            </select>
+        <input class="form-control form-control-navbar" type="text" placeholder="请输入查询条件" aria-label="Search" name="kw">
+        <div class="input-group-append">
+
+          <button class="btn btn-navbar" type="submit">
+            <i href="{% url 'consultRecords' %}" class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+{% endblock %}
+
+{% block choose %}
+
+        <div class="inline-group mb-3 input-group-sm" style="">
+            <span class="input-group-prepend">
+                <select name="bilk_action" id="">
+                        <option value="bulk_delete">批量删除</option>
+{#                        <option value="bulk_update">批量更新</option>#}
+                </select>
+
+        <button class="btn btn-primary btn-sm" type="submit">Go</button>
+            </span>
+        </div>
+
+
+        {% endblock %}
+
+
+
+{% block content %}
+
+    <table style="margin-top: 10px;" class="table table-bordered table-hover table-striped">
+        <thead>
+        <tr>
+            <th>
+                <input type="checkbox" id = 'd'></th>
+            </th>
+            <th>序号</th>
+            <th>为什么报名</th>
+            <th>审批通过</th>
+            <th>客户名称</th>
+            <th>学校</th>
+            <th>所报班级</th>
+            {% if 'enrollments_edit' in request.session.url_names or 'enrollment_del' in request.session.url_names %}
+            <th>操作</th>
+            {% endif %}
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for enrollment in all_enrollments %}
+
+            <tr>
+                <td>
+                    <input type="checkbox" name="eids" value="{{ enrollment.id }}">
+                </td>
+                <td class="first_child">{{ forloop.counter }}</td>
+                <td>{{ enrollment.why_us }}</td>
+                <td>{{ enrollment.contract_approved|repalce_info }}</td>
+                <td>{{ enrollment.customer.name }}</td>
+                <td>{{ enrollment.school.name }}</td>
+                <td>{{ enrollment.enrolment_class }}</td>
+                {% if 'enrollments_edit' in request.session.url_names or 'enrollment_del' in request.session.url_names %}
+                <td>
+                {% if 'enrollments_edit' in request.session.url_names %}
+                <a href="{% resolve_url request 'enrollments_edit' enrollment.id %}" title="编辑">
+                        <i class="fa fa-pencil"></i>&nbsp;</a>
+                {% endif %}
+                    {% if 'enrollment_del' in request.session.url_names %}
+                    <a  ccid = "{{ enrollment.id }}" class="delete_btn de" href="{% url 'enrollment_del' enrollment.id %}" title="删除">&nbsp;
+                        <i class="fa fa-remove"></i></a>
+                    {% endif %}
+
+                </td>
+            {% endif %}
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="9" style="text-align: center;">
+                    sorry,没有查询相关用户信息,请核对后再查!!!!!
+                </td>
+            </tr>
+
+        {% endfor %}
+
+
+        </tbody>
+
+    </table>
+
+    {{ page_html }}
+
+
+{% endblock %}
+
+
+
+

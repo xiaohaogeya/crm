@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{#路飞#}
+{#{% for foo in bread_crumb %}#}
+{#    {% if forloop.last %}#}
+{#    <li class="active">{{ foo.title }}</li>#}
+{#        {% else %}#}
+{#        <li class="active">#}
+{#            <a href="{{ foo.url }}">#}
+{#                {{ foo.title }}#}
+{#            </a>#}
+{#        </li>#}
+{#    {% endif %}#}
+{#{% endfor %}#}
+
+
+
+{#crm#}
+
+{% for foo in bread_crumb %}
+    {% if forloop.last %}
+        <li class="breadcrumb-item active">{{ foo.title }}</li>
+        {% else %}
+        <li class="breadcrumb-item active"><a href="{{ foo.url }}">{{ foo.title }}</a></li>
+    {% endif %}
+{% endfor %}
+
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+
+{% extends 'starter.html' %}
+{% load mytags %}
+{% block title %}
+
+    <h3 style="text-align: center;">跟进记录展示</h3>
+
+
+{% endblock %}
+
+
+{% block qq %}
+      <div class="input-group input-group-sm">
+          <select name="action" id="choose">
+                    <option value="">请选择</option>
+                    <option value="customer__name__contains">咨询客户</option>
+                    <option value="status__contains">跟进状态</option>
+                </select>
+        <input class="form-control form-control-navbar" type="text" placeholder="请输入查询条件" aria-label="Search" name="kw">
+        <div class="input-group-append">
+
+          <button class="btn btn-navbar" type="submit">
+            <i href="{% url 'consultRecords' %}" class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+{% endblock %}
+
+
+    {% block choose %}
+
+        <div class="inline-group mb-3 input-group-sm" style="">
+            <span class="input-group-prepend">
+                <select name="bilk_action" id="">
+                        <option value="bulk_delete">批量删除</option>
+{#                        <option value="bulk_update">批量更新</option>#}
+                </select>
+
+        <button class="btn btn-primary btn-sm" type="submit">Go</button>
+            </span>
+        </div>
+
+
+        {% endblock %}
+{% block content %}
+
+
+
+    <table  class="table table-bordered table-hover table-striped">
+
+        <thead>
+            <tr>
+                <th><input type="checkbox" id = 'd'></th>
+                <th>序号</th>
+                <th>所咨询客户</th>
+                <th>跟进内容</th>
+                <th>跟进状态</th>
+                <th>跟进人</th>
+                <th>跟进日期</th>
+                {% if 'consultrecord_edit' in request.session.url_names or 'consultrecord_del' in request.session.url_names %}
+                <th>操作</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for consultrecord in all_consultrecords %}
+                <tr>
+                   <td>
+                        <input class="quanxuan" type="checkbox" name="cids" value="{{ consultrecord.id }}">
+                    </td>
+                    <td class="first_child">
+{#                        {{ forloop.counter }}#}
+                        {{ request|list_number:forloop.counter }}
+                    </td>
+                    <td>
+                        {{ consultrecord.customer.name }}
+                    </td>
+                    <td>
+                        {{ consultrecord.note }}
+                    </td>
+                    <td>
+                        {{ consultrecord.get_status_display }}
+                    </td>
+                    <td>
+                        {{ consultrecord.consultant }}
+                    </td>
+                    <td>
+                        {{ consultrecord.date|date:'Y-m-d'}}
+                    </td>
+                {% if 'consultrecord_edit' in request.session.url_names or 'consultrecord_del' in request.session.url_names %}
+                    <td style="text-align: center">
+
+                        {% if 'consultrecord_edit' in request.session.url_names %}
+                        <a href="{% resolve_url request 'consultrecord_edit' consultrecord.id %}" title="编辑">
+                            <i class="fa fa-pencil"></i>&nbsp;</a>
+                        {% endif %}
+
+                        {% if 'consultrecord_del' in request.session.url_names %}
+
+                        <a ccid = "{{ consultrecord.id }}" class="delete_btn de" href="{% url 'consultrecord_del' consultrecord.id %}"
+                           title="删除">&nbsp;
+                            <i class="fa fa-remove"></i></a>
+                        {% endif %}
+                    </td>
+                {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" style="text-align: center;color: red;">
+                        Sorry，没有找到相关信息
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+{#        </form>#}
+
+
+
+    {{ page_html }}
+
+{% endblock %}
+
+
+
+

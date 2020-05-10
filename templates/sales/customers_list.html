@@ -1,0 +1,140 @@
+
+{% extends 'starter.html' %}
+{% load mytags %}
+{% block title %}
+    {% if gs == 1 %}
+    <h3 style="text-align: center;">公户信息展示</h3>
+        {% else %}
+        <h3 style="text-align: center;">我的客户展示</h3>
+    {% endif %}
+
+{% endblock %}
+
+{% block qq %}
+      <div class="input-group input-group-sm">
+          <select name="action" id="choose">
+                    <option value="">请选择</option>
+                    <option value="qq__contains">QQ</option>
+                    <option value="name__contains">姓名</option>
+                </select>
+        <input class="form-control form-control-navbar" type="text" placeholder="请输入查询条件" aria-label="Search" name="kw">
+        <div class="input-group-append">
+
+          <button class="btn btn-navbar" type="submit">
+            <i href="{% url 'customers' %}" class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+{% endblock %}
+
+    {% block choose %}
+        <div class="inline-group mb-3 input-group-sm" style="">
+            <span class="input-group-prepend">
+                <select name="bulk_aciton" id="">
+                    {% if gs == 1 %}
+                        <option value="reverse_gs">公户转私户</option>
+                    {% else %}
+                        <option value="reverse_sg">私户转公户</option>
+                    {% endif %}
+                </select>
+
+        <button class="btn btn-primary btn-sm" type="submit">Go</button>
+            </span>
+        </div>
+
+        {% endblock %}
+{% block content %}
+
+    <table  class="table table-bordered table-hover table-striped">
+
+        <thead>
+            <tr>
+                <th><input type="checkbox" id = 'd'></th>
+                <th>序号</th>
+                <th>QQ</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>客户来源</th>
+                {% if cho == 2 %}
+                <th>跟进记录</th>
+                {% endif %}
+                <th>咨询课程</th>
+                <th>状态</th>
+                <th>销售</th>
+            {% if 'customer_edit' in request.session.url_names or 'customer_del' in request.session.url_names %}
+                <th>操作</th>
+            {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in all_customers %}
+                <tr>
+                   <td>
+                        <input class="quanxuan" type="checkbox" name="cids" value="{{ customer.id }}">
+                    </td>
+                    <td class="first_child">
+                        {{ request|list_number:forloop.counter }}
+                    </td>
+                    <td>
+                        {{ customer.qq }}
+                    </td>
+                    <td>
+                        {{ customer.name }}
+                    </td>
+                    <td>
+                        {{ customer.get_sex_display }}
+                    </td>
+                    <td>
+                        {{ customer.get_source_display }}
+                    </td>
+                    {% if cho == 2 %}
+                     <td>
+                        <a href="{% url 'consultRecords' %}?cid={{ customer.id }}">详情信息</a>
+                    </td>
+                    {% endif %}
+
+                    <td>
+                        {{ customer.get_course_display }}
+                    </td>
+                    <td>
+                        {{ customer.get_status_display }}
+                    </td>
+                    <td>
+                        {{ customer.consultant.username|default:'暂无' }}
+                    </td>
+                {% if 'customer_edit' in request.session.url_names or 'customer_del' in request.session.url_names %}
+                    <td style="text-align: center">
+                    {% if 'customer_edit' in request.session.url_names %}
+                        <a href="{% resolve_url request 'customer_edit' customer.id %}" title="编辑">
+                            <i class="fa fa-pencil"></i>&nbsp;</a>
+                        {% endif %}
+                    {% if 'customer_del' in request.session.url_names %}
+                    <a ccid = "{{ customer.id }}" class="delete_btn de" href="{% url 'customer_del' customer.id %}"
+                           title="删除">&nbsp;
+                            <i class="fa fa-remove"></i></a>
+                    {% endif %}
+
+                    </td>
+                {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" style="text-align: center;color: red;">
+                        Sorry，没有找到相关信息
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+
+
+
+    {{ page_html }}
+
+{% endblock %}
+
+
+
+

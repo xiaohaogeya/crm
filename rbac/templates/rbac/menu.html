@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{#{% for menu in menu_list %}#}
+{#    <a href="{{ menu.permissions__url }}" class="{{ menu.class }}">#}
+{#        <span class="icon-wrap">#}
+{#            <i class="fa {{ menu.permissions__icon }}"></i>#}
+{#        </span>#}
+{#        {{ menu.permissions__title }}#}
+{#    </a>#}
+{#{% endfor %}#}
+
+{#路飞学城#}
+{#{% for menu_k,menu_v in menu_order_dict.items %}#}
+{##}
+{#    <div class="item">#}
+{#        <div class="title">#}
+{#            <i class="fa {{ menu_v.icon }} fa-spin"></i>#}
+{#            {{ menu_v.title }}#}
+{#        </div>#}
+{#        <div class="body {{ menu_v.class }}">#}
+{#            {% for child in menu_v.children %}#}
+{##}
+{#                <a href="{{ child.url }}" class="{{ child.class }}">#}
+{#                    <span class="icon-wrap">#}
+{#                        <i class="fa {{ child.icon }} fa-spin"></i>#}
+{#                    </span>#}
+{#                    {{ child.title }}#}
+{#                </a>#}
+{#            {% endfor %}#}
+{##}
+{#        </div>#}
+{#    </div>#}
+{#{% endfor %}#}
+
+
+{#crm#}
+
+{% for menu_k,menu_v in menu_order_dict.items %}
+
+
+<li class="nav-item has-treeview menu-open">
+<a href="#" class="nav-link active">
+  <i class="nav-icon fas {{ menu_v.icon }} fa-spin"></i>
+  <p>
+    {{ menu_v.title }}
+    <i class="right fas fa-angle-left"></i>
+  </p>
+</a>
+<ul class="nav nav-treeview">
+    {% for child in menu_v.children %}
+
+  <li class="nav-item">
+    <a href="{{ child.url }}" class="nav-link {{ child.class }}">
+      <i class="far fa-spin {{ child.icon }} nav-icon"></i>
+      <p> {{ child.title }}</p>
+    </a>
+  </li>
+        {% endfor %}
+</ul>
+</li>
+{% endfor %}
+
+
+</body>
+</html>

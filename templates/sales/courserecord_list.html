@@ -1,0 +1,162 @@
+
+{% extends 'starter.html' %}
+{% load mytags %}
+{% block title %}
+
+    <h3 style="text-align: center;">课程记录展示</h3>
+
+
+{% endblock %}
+
+
+{% block qq %}
+      <div class="input-group input-group-sm">
+          <select name="action" id="choose">
+                    <option value="">请选择</option>
+                    <option value="day_num">节次</option>
+                    <option value="teacher__username__contains">讲师</option>
+                    <option value="re_class__course__contains">班级</option>
+                </select>
+        <input class="form-control form-control-navbar" type="text" placeholder="请输入查询条件" aria-label="Search" name="kw">
+        <div class="input-group-append">
+
+          <button class="btn btn-navbar" type="submit">
+            <i href="{% url 'consultRecords' %}" class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+{% endblock %}
+
+
+    {% block choose %}
+
+        <div class="inline-group mb-3 input-group-sm" style="">
+            <span class="input-group-prepend">
+                <select name="bulk_action" id="bulk_action">
+                        <option value="bulk_create_sr">批量生成学习记录</option>
+                </select>
+
+        <button class="btn btn-primary btn-sm" type="submit" id="go" >Go</button>
+            </span>
+        </div>
+
+
+        {% endblock %}
+{% block content %}
+
+
+
+    <table  class="table table-bordered table-hover table-striped">
+
+        <thead>
+            <tr>
+                <th><input type="checkbox" id = 'd'></th>
+                <th>序号</th>
+                <th>节次</th>
+                <th>上课日期</th>
+                <th>本节课程标题</th>
+                <th>本节课程内容</th>
+                <th>班级</th>
+                <th>讲师</th>
+                <th>学习记录</th>
+                {% if 'courserecord_edit' in request.session.url_names or 'courserecord_del' in request.session.url_names %}
+                <th>操作</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for courserecord in courserecord_list %}
+                <tr>
+                   <td>
+                        <input class="quanxuan" type="checkbox" name="cids" value="{{ courserecord.id }}">
+                    </td>
+                    <td class="first_child">
+                        {{ request|list_number:forloop.counter }}
+                    </td>
+                    <td>
+                        {{ courserecord.day_num}}
+                    </td>
+                    <td>
+                        {{ courserecord.date|date:'Y-m-d' }}
+                    </td>
+                    <td>
+                        {{ courserecord.course_title }}
+                    </td>
+                    <td>
+                        {{ courserecord.course_memo }}
+                    </td>
+                    <td>
+                        {{ courserecord.re_class.course|tihuan }}
+                    </td>
+                    <td>
+                        {{ courserecord.teacher.username }}
+                    </td>
+                    <td>
+                        <a href="{% url 'studyrecords' %}?cid={{ courserecord.id }}">查看学习记录</a>
+{#                        <a href="{% url 'studyrecords' %}">查看学习记录</a>#}
+                    </td>
+                    {% if 'courserecord_edit' in request.session.url_names or 'courserecord_del' in request.session.url_names %}
+                    <td style="text-align: center">
+                        {% if 'courserecord_edit' in request.session.url_names %}
+                         <a href="{% resolve_url request 'courserecord_edit' courserecord.id %}" title="编辑">
+                            <i class="fa fa-pencil"></i>&nbsp;</a>
+                            {% endif %}
+                        {% if 'courserecord_edit' in request.session.url_names %}
+                        <a ccid = "{{ courserecord.id }}" class="delete_btn de" href="{% url 'courserecord_del' courserecord.id %}"
+                           title="删除">&nbsp;
+                            <i class="fa fa-remove"></i></a>
+                            {% endif %}
+                    </td>
+                {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10" style="text-align: center;color: red;">
+                        Sorry，没有找到相关信息
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+{#        </form>#}
+
+
+
+    {{ page_html }}
+
+{% endblock %}
+
+
+{% block scr %}
+<script>
+
+    $('#go').click(function () {
+        var bulk_action = $('#bulk_action').val();
+        var cids_list = [];
+        var cids = $('[type="checkbox"]:checked');
+        console.log(cids);
+        for (var i=0;i<cids.length;i++){
+            var v = cids.eq(i).val();
+            console.log(v);
+            cids_list.push(v);
+        }
+        console.log(cids_list);
+        $.ajax({
+            url:'',
+            type:'post',
+            data:{bulk_action:bulk_action,cids_list:JSON.stringify(cids_list),'csrfmiddlewaretoken':'{{ csrf_token }}'},
+            success:function (res) {
+                console.log(res);
+                if(res.status === 1){
+                    alert('恭喜你，成功了!!!!','success');
+                }else {
+                    alert('菜鸡!!!失败了!!');
+                }
+            }
+        })
+    })
+    </script>
+
+{% endblock %}
+
